@@ -74,7 +74,7 @@ impl CoreManager {
         let current_pid = std::process::id() as i32;
         println!("Current PID: {}", current_pid);
         Ok(HashMap::from([
-            ("service".into(), "Clash Verge Service".into()),
+            ("service".into(), "Clash Max Service".into()),
             ("version".into(), env!("CARGO_PKG_VERSION").into()),
         ]))
     }
@@ -121,7 +121,7 @@ impl CoreManager {
             }
         }
 
-        // 检测并停止系统中其他可能运行的verge-mihomo进程
+        // 检测并停止系统中其他可能运行的max-mihomo进程
         self.stop_other_mihomo_processes()?;
 
         {
@@ -216,7 +216,7 @@ impl CoreManager {
         Ok(())
     }
 
-    // 检测并停止其他verge-mihomo进程
+    // 检测并停止其他max-mihomo进程
     pub fn stop_other_mihomo_processes(&self) -> Result<()> {
         // 获取当前进程的PID
         let current_pid = std::process::id();
@@ -228,20 +228,20 @@ impl CoreManager {
             .running_pid
             .load(Ordering::Relaxed) as u32;
         
-        match process::find_processes("verge-mihomo") {
+        match process::find_processes("max-mihomo") {
             Ok(pids) => {
                 // 直接在迭代过程中过滤和终止
                 let kill_count = pids.into_iter()
                     .filter(|&pid| pid != current_pid && (tracked_mihomo_pid <= 0 || pid != tracked_mihomo_pid))
                     .map(|pid| {
-                        println!("Found other verge-mihomo process with PID: {}, stopping it", pid);
+                        println!("Found other max-mihomo process with PID: {}, stopping it", pid);
                         match process::kill_process(pid) {
                             Ok(_) => {
-                                println!("Successfully stopped verge-mihomo process {}", pid);
+                                println!("Successfully stopped max-mihomo process {}", pid);
                                 true
                             }
                             Err(e) => {
-                                eprintln!("Failed to kill verge-mihomo process {}: {}", pid, e);
+                                eprintln!("Failed to kill max-mihomo process {}: {}", pid, e);
                                 false
                             }
                         }
@@ -249,10 +249,10 @@ impl CoreManager {
                     .filter(|&success| success)
                     .count();
                     
-                println!("Successfully stopped {} verge-mihomo processes", kill_count);
+                println!("Successfully stopped {} max-mihomo processes", kill_count);
             }
             Err(e) => {
-                eprintln!("Error finding verge-mihomo processes: {}", e);
+                eprintln!("Error finding max-mihomo processes: {}", e);
             }
         }
         
@@ -360,7 +360,7 @@ impl CoreManager {
             eprintln!("Error killing clash process: {}", e);
         }
 
-        // 同时停止mihomo进程和其他verge-mihomo进程
+        // 同时停止mihomo进程和其他max-mihomo进程
         let _ = self.stop_mihomo();
         let _ = self.stop_other_mihomo_processes();
 

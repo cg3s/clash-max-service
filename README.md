@@ -1,3 +1,3 @@
-# Clash Verge Service
+# Clash Max Service
 
 A Windows Service.
