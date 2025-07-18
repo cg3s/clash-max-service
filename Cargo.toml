@@ -1,13 +1,13 @@
 [package]
-name = "clash-verge-service"
+name = "clash-max-service"
 version = "1.1.0"
 edition = "2021"
-authors = ["zzzgydi", "Clash Verge Rev Team"]
+authors = ["zzzgydi", "Clash Max Team"]
 license = "GPL-3.0"
-repository = "https://github.com/zzzgydi/clash-verge-service.git"
+repository = "https://github.com/cg3s/clash-max-service.git"
 
 [[bin]]
-name = "clash-verge-service"
+name = "clash-max-service"
 path = "src/main.rs"
 
 [[bin]]

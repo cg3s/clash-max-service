@@ -185,7 +185,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "clash-verge-service"
+name = "clash-max-service"
 version = "1.1.0"
 dependencies = [
  "anyhow",

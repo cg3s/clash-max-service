@@ -72,7 +72,7 @@ impl CoreManager {
         info!("服务当前PID: {}", current_pid);
         
         Ok(VersionResponse {
-            service: "Clash Verge Service".into(),
+            service: "Clash Max Service".into(),
             version: env!("CARGO_PKG_VERSION").into(),
         })
     }
@@ -99,7 +99,7 @@ impl CoreManager {
         // 确保先停止已运行的mihomo进程
         let _ = self.stop_mihomo();
         
-        // 停止系统中其他可能运行的verge-mihomo进程
+        // 停止系统中其他可能运行的max-mihomo进程
         self.stop_other_mihomo_processes()?;
 
         // Get runtime config
@@ -176,7 +176,7 @@ impl CoreManager {
         Ok(())
     }
 
-    // 检测并停止其他verge-mihomo进程
+    // 检测并停止其他max-mihomo进程
     pub fn stop_other_mihomo_processes(&self) -> Result<()> {
         // 获取当前进程的PID和已跟踪的mihomo PID
         let current_pid = std::process::id();
@@ -188,9 +188,9 @@ impl CoreManager {
             .running_pid
             .load(Ordering::Relaxed) as u32;
 
-        let process_result = process::find_processes("verge-mihomo");
+        let process_result = process::find_processes("max-mihomo");
         if let Err(e) = &process_result {
-            error!("查找verge-mihomo进程出错: {}", e);
+            error!("查找max-mihomo进程出错: {}", e);
             return Ok(());
         }
         
@@ -203,7 +203,7 @@ impl CoreManager {
         let kill_count = pids.into_iter()
             .filter(|&pid| pid != current_pid && (tracked_mihomo_pid <= 0 || pid != tracked_mihomo_pid))
             .map(|pid| {
-                info!("正在停止其他verge-mihomo进程: {}", pid);
+                info!("正在停止其他max-mihomo进程: {}", pid);
                 match process::kill_process(pid) {
                     Ok(_) => true,
                     Err(e) => {
@@ -216,7 +216,7 @@ impl CoreManager {
             .count();
             
         if kill_count > 0 {    
-            info!("已停止 {} 个verge-mihomo进程", kill_count);
+            info!("已停止 {} 个max-mihomo进程", kill_count);
         }
         
         Ok(())
@@ -279,7 +279,7 @@ impl CoreManager {
         // 停止mihomo进程(实际上这就是clash使用的进程)
         let _ = self.stop_mihomo();
         
-        // 确保所有其他verge-mihomo进程也被停止
+        // 确保所有其他max-mihomo进程也被停止
         let _ = self.stop_other_mihomo_processes();
 
         info!("Clash已成功停止");
